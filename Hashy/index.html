@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hash Breaker Online</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        #loading {
+            display: none;
+            margin-top: 20px;
+        }
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hash Breaker Online</h1>
+    <label for="hashInput">Enter Hash:</label>
+    <input type="text" id="hashInput" placeholder="Enter your hash" />
+    <button onclick="breakHash()">Break Hash</button>
+    <div id="loading">Cracking... <img src="loading.gif" alt="Loading" /></div>
+    <div id="result"></div>
+
+    <script>
+        async function breakHash() {
+            const hashInput = document.getElementById('hashInput').value;
+            const loadingDiv = document.getElementById('loading');
+            const resultDiv = document.getElementById('result');
+
+            if (!hashInput) {
+                alert('Please enter a hash.');
+                return;
+            }
+
+            loadingDiv.style.display = 'block';
+            resultDiv.innerHTML = '';
+
+            try {
+                const response = await fetch(`https://md5decrypt.net/Api/api.php?hash=${hashInput}&hash_type=md5&email=cybercroc@protonmail.com&code=c5ddc9bbd5b07c45`);
+                const data = await response.text();
+
+                loadingDiv.style.display = 'none';
+
+                if (data.length !== 0) {
+                    resultDiv.innerHTML = `<p>Password is: <strong>${data}</strong></p>`;
+                } else {
+                    resultDiv.innerHTML = '<p>Hash was not found in the database.</p>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                loadingDiv.style.display = 'none';
+                resultDiv.innerHTML = '<p>An error occurred. Please try again later.</p>';
+            }
+        }
+    </script>
+</body>
+</html>
